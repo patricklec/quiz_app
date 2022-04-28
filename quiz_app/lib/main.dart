@@ -2,7 +2,6 @@
 
 import "package:flutter/material.dart";
 
-import "./answer.dart";
 import "./quiz.dart";
 import 'result.dart';
 
@@ -52,6 +51,13 @@ class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
   var _total_score = 0;
 
+  void _restartQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _total_score = 0;
+    });
+  }
+
   void _answerQuestion(bool correct) {
     if (correct == true) {
       _total_score += 1;
@@ -75,7 +81,7 @@ class _MyAppState extends State<MyApp> {
                 questions: _questions,
                 questionIndex: _questionIndex,
               )
-            : Result(_total_score, _questions.length),
+            : Result(_total_score, _questions.length, _restartQuiz),
       ),
     );
   }

@@ -1,10 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import "package:flutter/material.dart";
 
 class Result extends StatelessWidget {
   final int resultScore;
-  var max_score;
+  final max_score;
+  final VoidCallback restart;
 
-  Result(this.resultScore, this.max_score);
+  Result(this.resultScore, this.max_score, this.restart);
 
   String get resultPhrase {
     var resultText = "You did it!";
@@ -24,9 +27,19 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        resultPhrase,
-        style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+      child: Column(
+        children: [
+          Text(
+            resultPhrase,
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          FlatButton(
+            onPressed: restart,
+            child: Text("Try again!", style: TextStyle(fontSize: 18)),
+            textColor: Colors.blue,
+          )
+        ],
       ),
     );
   }
