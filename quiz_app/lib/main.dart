@@ -2,8 +2,9 @@
 
 import "package:flutter/material.dart";
 
-import './answer.dart';
-import "./question.dart";
+import "./answer.dart";
+import "./quiz.dart";
+import 'result.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,26 +18,46 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var questions = [
+  final _questions = [
     {
-      "question": "What is your favorite color?",
-      "answers": ["Black", "Red", "Green", "White"]
+      "question": "How long is an Olympic swimming pool (in meters)?",
+      "answers": [
+        {"answer": "50m", "correct": true},
+        {"answer": "20m", "correct": false},
+        {"answer": "30m", "correct": false},
+        {"answer": "60m", "correct": false}
+      ]
     },
     {
-      "question": "What is your favorite animal?",
-      "answers": ["Rabbit", "Dog", "Cat", "Horse"]
+      "question":
+          "What countries made up the original Axis powers in World War II?",
+      "answers": [
+        {"answer": "Germany, France, Italy", "correct": false},
+        {"answer": "Germany, Denmark, Italy", "correct": false},
+        {"answer": "Germany, Italy, Japan", "correct": true},
+        {"answer": "Germany, Romania, Italy", "correct": false}
+      ]
     },
     {
-      "question": "What is your favorite season?",
-      "answers": ["Spring", "Summer", "Fall", "Winter"]
+      "question": "What is cynophobia?",
+      "answers": [
+        {"answer": "Fear of sarcasm", "correct": false},
+        {"answer": "Fear of dogs", "correct": true},
+        {"answer": "Fear of storms", "correct": false},
+        {"answer": "Fear of cynicism", "correct": false}
+      ]
     }
   ];
 
   var _questionIndex = 0;
+  var _total_score = 0;
 
-  void _answerQuestion() {
+  void _answerQuestion(bool correct) {
+    if (correct == true) {
+      _total_score += 1;
+    }
+
     setState(() {
-      print("Answer chosen!");
       _questionIndex = _questionIndex + 1;
     });
   }
@@ -48,17 +69,13 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text("MyApp"),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]["question"] as String,
-            ),
-            ...(questions[_questionIndex]["answers"] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questions: _questions,
+                questionIndex: _questionIndex,
+              )
+            : Result(_total_score, _questions.length),
       ),
     );
   }
